@@ -28,7 +28,7 @@ import model.Rectangle;
   * A Canvas exists in this BorderPane that will draw all
   * PaintObjects stored in the Vector<PaintObject> object.
   * 
-  * @author YOUR NAME
+  * @author Haotian Yuan
  */
 public class DrawVectorOfPaintObjects extends Application {
 
