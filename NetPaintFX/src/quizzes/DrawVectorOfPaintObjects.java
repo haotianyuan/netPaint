@@ -9,13 +9,14 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
+//import javafx.scene.shape.Line;   Do not import this one
 import javafx.stage.Stage;
-// Classes need to be implemented
+//Classes need to be implemented
 import model.PaintObject;
 import model.Oval;
 import model.Picture;
 import model.Rectangle;
+import model.Line;   // This means you must have class Line in the model package
 /**  
   * There will be many compile time errors until you implement 
   * PaintObject inheritance hierarchy.
@@ -59,6 +60,7 @@ public class DrawVectorOfPaintObjects extends Application {
     // All of these PaintObject objects must be constructed with two Point objects.
     // The first point could be to the upper left or to the lower right 
     Vector<PaintObject> allPaintObjects = new Vector<>();
+    
     // Create six line object, where any line must be drawn between the
     // two Point objects in the provided color. 
     PaintObject a = new Line(Color.RED, new Point(10, 100), new Point(500, 100));
