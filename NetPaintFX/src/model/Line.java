@@ -1,26 +1,28 @@
 package model;
+/*Author: Haotian Yuan
+ * This class is to set the element of a line, then draw the line out
+ * 
+ */
 
-import javafx.scene.canvas.Canvas;
+import java.awt.Point;
+
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.effect.Light.Point;
-import javafx.scene.paint.Color;
 
+import javafx.scene.paint.Color;
 public class Line extends PaintObject{
 	private Color color;
-	private java.awt.Point point1;
-	private java.awt.Point point2;
-	
-	public Line(Color a,java.awt.Point b,java.awt.Point c) {
+	private Point point1;//two points of a line
+	private Point point2;
+	public Line(Color a,Point point,Point point3) {
+		super(a,point,point3);
+		point1=point;
+		point2=point3;
 		color=a;
-		point1=b;
-		point2=c;
-		
 	}
 
 	@Override
 	public void draw(GraphicsContext gc) {
-		// TODO Auto-generated method stub
-		gc.setStroke(color);
+		gc.setStroke(color);//fill the line color
 		gc.strokeLine(point1.getX(), point1.getY(), point2.getX(), point2.getY());
 		gc.fill();
 	}
