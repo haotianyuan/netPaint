@@ -16,7 +16,7 @@ public class Picture extends PaintObject{
 	public Picture(Point point, Point point2, String string) {
 		super(point,point2,string);
 		x=new Image("file:NetPaintFX/images/doge.jpeg",false);
-		if(point.getX()<point2.getX()) {//if point is the left-upper point
+		if(point.getX()<point2.getX()&&point.getY()<point2.getY()) {//if point is the left-upper point
 			c=point;
 			width=point2.getX()-point.getX();
 			height=point2.getY()-point.getY();
