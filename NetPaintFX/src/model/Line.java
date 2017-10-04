@@ -4,20 +4,24 @@ package model;
  * 
  */
 
+import java.awt.Color;
 import java.awt.Point;
+import java.io.Serializable;
 
 import javafx.scene.canvas.GraphicsContext;
 
-import javafx.scene.paint.Color;
-public class Line extends PaintObject{
-	private Color color;
+public class Line extends PaintObject implements Serializable{
+	private javafx.scene.paint.Color color;
 	private Point point1;//two points of a line
 	private Point point2;
 	public Line(Color a,Point point,Point point3) {
 		super(a,point,point3);
 		point1=point;
 		point2=point3;
-		color=a;
+		
+		ColorTypeConverter temp=new ColorTypeConverter();
+		color=temp.Awt2Fx(a);
+		
 	}
 
 	@Override

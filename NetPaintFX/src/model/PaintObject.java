@@ -1,9 +1,11 @@
 package model;
 
+import java.awt.Color;
 import java.awt.Point;
+import java.io.Serializable;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+
 
 /**
  * PaintObject
@@ -14,13 +16,14 @@ import javafx.scene.paint.Color;
  * @author Haotian Yuan
  *
  */
-public abstract class PaintObject {
-	private Color color;
+public abstract class PaintObject implements Serializable{
+	private javafx.scene.paint.Color color;
 	private Point point1;
 	private Point point2;
 	private String resource;
 	public PaintObject(Color a,Point point,Point point3) {
-		color=a;
+		ColorTypeConverter temp=new ColorTypeConverter();
+		color=temp.Awt2Fx(a);
 		point1=point;
 		point2=point3;
 	}

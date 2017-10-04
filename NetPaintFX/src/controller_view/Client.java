@@ -1,6 +1,8 @@
 package controller_view;
 
+import java.awt.Color;
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.Vector;
 
 import javafx.application.Application;
@@ -19,9 +21,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
+import javafx.stage.Stage;
+import model.ColorTypeConverter;
 import model.Line;
 import model.Oval;
 import model.PaintObject;
@@ -39,14 +41,14 @@ import model.Rectangle;
  * @author Haotian Yuan
  * 
  */
-public class Client extends Application {
+public class Client extends Application implements Serializable{
 
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	private ColorPicker colorPicker;
-	private RadioButton line;
+	private RadioButton line;//four radiobuttons
 	private RadioButton rectangle;
 	private RadioButton oval;
 	private RadioButton picture;
@@ -59,8 +61,10 @@ public class Client extends Application {
 	private double x2;
 	private double y2;
 	private Color color;//the color
+	boolean firstclicked;
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		firstclicked=false;//to trace the point of shapes
 		color=color.RED;//default color
 		x1 = -1;//init all mouse position int an invalid position
 		x2 = -1;
@@ -76,14 +80,16 @@ public class Client extends Application {
 		allPaintObjects = createVectorOfPaintObjects();
 		drawAllPaintObects(allPaintObjects, canvas);
 		MouseHandler mouse = new MouseHandler();// receive the clicked information
-		canvas.setOnMousePressed(new MouseHandler());//press the mouse
-		canvas.setOnMouseReleased(new MouseHandler());//drag the mouse
-		canvas.setOnMouseDragged(new MouseHandler());//release the mouse
+		canvas.setOnMouseClicked(new MouseHandler());
+		canvas.setOnMouseMoved(new MouseHandler());
 		Scene scene = new Scene(all, 800, 650);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-
+	/*Method name: addHBox
+	 *Purpose: this method is to init the hbox and add four radiobuttons & colorpicker into the box
+	 * 
+	 */
 	private HBox addHBox() {
 		ButtonListener handler = new ButtonListener();//to get the information that which button is selected
 		HBox hbox = new HBox();//use hbox to set the radiobutton in a line
@@ -93,7 +99,9 @@ public class Client extends Application {
 		picture = new RadioButton("Picture");
 		colorPicker = new ColorPicker();
 		colorPicker.setOnAction(new ColorChanger());
-		colorPicker.setValue(color.RED);//set the default color of colorpicker
+		ColorTypeConverter temp=new ColorTypeConverter();
+		javafx.scene.paint.Color a=temp.Awt2Fx(color.RED);
+		colorPicker.setValue(a);//set the default color of colorpicker
 		line.setOnAction(handler);//set all buttons on action to draw the respective shape
 		oval.setOnAction(handler);
 		rectangle.setOnAction(handler);
@@ -109,13 +117,21 @@ public class Client extends Application {
 		picture.setToggleGroup(group);
 		return hbox;
 	}
-
+	
+	/*Method name: drawAllPaintObects
+	 *Purpose: this method is to draw all objects in the list
+	 * 
+	 */
 	private void drawAllPaintObects(Vector<PaintObject> allPaintObjects, Canvas canvas) {
 		// TODO Auto-generated method stub
 		for (PaintObject po : allPaintObjects)
 			po.draw(gc);
 	}
-
+	
+	/*Method name: createVectorOfPaintObjects
+	 *Purpose: this method is create a list of paintobjects
+	 * 
+	 */
 	private Vector<PaintObject> createVectorOfPaintObjects() {
 		Vector<PaintObject> allPaintObjects = new Vector<>();
 		return allPaintObjects;
@@ -128,14 +144,15 @@ public class Client extends Application {
 
 		@Override
 		public void handle(MouseEvent event) {			
-			boolean released=false;//to check if we released the mouse
+		
 			
-			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-
+			if (event.getEventType() == MouseEvent.MOUSE_CLICKED && firstclicked==false) {
+				firstclicked=true;
 				x1 = event.getX();
 				y1 = event.getY();
+				
 			}
-			else if(event.getEventType()==MouseEvent.MOUSE_DRAGGED) {
+			else if(event.getEventType()==MouseEvent.MOUSE_MOVED && firstclicked==true) {
 				gc.clearRect(0, 0, 800, 550);
 				x2 = event.getX();
 				y2 = event.getY();
@@ -157,20 +174,38 @@ public class Client extends Application {
 				}
 				drawAllPaintObects(allPaintObjects, canvas);				
 				allPaintObjects.remove(allPaintObjects.size()-1);//remove the last dragged shape to avoid drawing it again
+				x2=-1;
+				y2=-1;
 			}
-			else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
-				released = true;
-				x2 = event.getX();
-				y2 = event.getY();
+			else if(event.getEventType() == MouseEvent.MOUSE_CLICKED && firstclicked==true) {
+				firstclicked=false;
+				x2=event.getX();
+				y2=event.getY();
+				if(button.compareTo("line")==0) {
+					PaintObject a = new Line(color, new Point((int) x1, (int) y1), new Point((int) x2, (int) y2));
+					allPaintObjects.add(a);
+				}
+				else if(button.compareTo("oval")==0) {
+					PaintObject a = new Oval(color, new Point((int) x1, (int) y1), new Point((int) x2, (int) y2));
+					allPaintObjects.add(a);
+				}
+				else if(button.compareTo("rectangle")==0) {
+					PaintObject a = new Rectangle(color, new Point((int) x1, (int) y1), new Point((int) x2, (int) y2));
+					allPaintObjects.add(a);
+				}
+				else if(button.compareTo("picture")==0) {
+					PaintObject a = new Picture(new Point((int) x1, (int) y1), new Point((int) x2, (int) y2),"doge.jpg");
+					allPaintObjects.add(a);
+				}
+				drawAllPaintObects(allPaintObjects, canvas);		
 			}
-			if(x1!=-1 && x2!=-1 &&y1!=-1 && y2!=-1 && released==true) {
+		
+			if(x1!=-1 && x2!=-1 &&y1!=-1 && y2!=-1 ) {
 			if (button.compareTo("line") == 0) {
 				
 					PaintObject a = new Line(color, new Point((int) x1, (int) y1), new Point((int) x2, (int) y2));
 
-					allPaintObjects.add(a);
-				
-								
+					allPaintObjects.add(a);							
 			}
 			else if(button.compareTo("oval")==0) {
 				PaintObject a = new Oval(color, new Point((int) x1, (int) y1), new Point((int) x2, (int) y2));
@@ -188,7 +223,7 @@ public class Client extends Application {
 			x2=-1;
 			y1=-1;
 			y2=-1;
-			drawAllPaintObects(allPaintObjects, canvas);
+			//drawAllPaintObects(allPaintObjects, canvas);
 			}
 		
 		}
@@ -201,7 +236,8 @@ public class Client extends Application {
 
 		@Override
 		public void handle(ActionEvent event) {
-			color = colorPicker.getValue();//get the color of colorpicker
+			ColorTypeConverter temp=new ColorTypeConverter();
+			color = temp.Fx2Awt(colorPicker.getValue());//get the color of colorpicker
 		}
 	}
 	

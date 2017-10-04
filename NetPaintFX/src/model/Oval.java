@@ -4,18 +4,20 @@ package model;
  * 
  */
 import java.awt.Point;
+import java.io.Serializable;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import java.awt.Color;
 
-public class Oval extends PaintObject{
-	private Color color;
+public class Oval extends PaintObject implements Serializable{
+	private javafx.scene.paint.Color color;
 	private Point c;//the left-upper point 
 	private double width;
 	private double height;
 	public Oval(Color black, Point point, Point point3) {
 		super(black,point,point3);
-		
+		ColorTypeConverter temp=new ColorTypeConverter();
+		color=temp.Awt2Fx(black);
 		if(point.getX()<point3.getX() && point.getY()<point3.getY()) {//if point is the left-upper point
 			c=point;
 			width=point3.getX()-point.getX();
@@ -38,7 +40,7 @@ public class Oval extends PaintObject{
 			width=point.getX()-point3.getX();
 			height=point.getY()-point3.getY();
 		}
-		color=black;
+		
 	}
 
 	@Override

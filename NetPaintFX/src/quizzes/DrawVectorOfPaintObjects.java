@@ -1,5 +1,6 @@
 package quizzes;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.util.Vector;
 
@@ -8,7 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
+
 //import javafx.scene.shape.Line;   Do not import this one
 import javafx.stage.Stage;
 //Classes need to be implemented
