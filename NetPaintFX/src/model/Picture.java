@@ -4,18 +4,18 @@ package model;
  * 
  */
 import java.awt.Point;
+import java.io.Serializable;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class Picture extends PaintObject{
-	private Image x;//the image
+public class Picture extends PaintObject implements Serializable{
 	private Point c;//the left-upper position
 	private double width;//width of the picture
 	private double height;//height of the picture
 	public Picture(Point point, Point point2, String string) {
 		super(point,point2,string);
-		x=new Image("file:NetPaintFX/images/doge.jpeg",false);
+		
 		if(point.getX()<point2.getX()&&point.getY()<point2.getY()) {//if point is the left-upper point
 			c=point;
 			width=point2.getX()-point.getX();
@@ -44,6 +44,7 @@ public class Picture extends PaintObject{
 	
 	public void draw(GraphicsContext gc) {
 		// TODO Auto-generated method stub
+		Image x=new Image("file:NetPaintFX/images/doge.jpeg",false);
 		gc.drawImage(x, c.getX(), c.getY(), width, height);
 		
 	}

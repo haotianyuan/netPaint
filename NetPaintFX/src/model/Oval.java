@@ -10,14 +10,14 @@ import javafx.scene.canvas.GraphicsContext;
 import java.awt.Color;
 
 public class Oval extends PaintObject implements Serializable{
-	private javafx.scene.paint.Color color;
+	private Color color;
 	private Point c;//the left-upper point 
 	private double width;
 	private double height;
 	public Oval(Color black, Point point, Point point3) {
 		super(black,point,point3);
-		ColorTypeConverter temp=new ColorTypeConverter();
-		color=temp.Awt2Fx(black);
+		
+		color=black;
 		if(point.getX()<point3.getX() && point.getY()<point3.getY()) {//if point is the left-upper point
 			c=point;
 			width=point3.getX()-point.getX();
@@ -46,7 +46,8 @@ public class Oval extends PaintObject implements Serializable{
 	@Override
 	public void draw(GraphicsContext gc) {
 		// TODO Auto-generated method stub
-		gc.setFill(color);
+		ColorTypeConverter temp=new ColorTypeConverter();
+		gc.setFill(temp.Awt2Fx(color));
 		gc.fillOval(c.getX(), c.getY(), width, height);
 	}
 }

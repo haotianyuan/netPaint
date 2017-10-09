@@ -17,13 +17,13 @@ import javafx.scene.canvas.GraphicsContext;
  *
  */
 public abstract class PaintObject implements Serializable{
-	private javafx.scene.paint.Color color;
+	private Color color;
 	private Point point1;
 	private Point point2;
 	private String resource;
 	public PaintObject(Color a,Point point,Point point3) {
-		ColorTypeConverter temp=new ColorTypeConverter();
-		color=temp.Awt2Fx(a);
+		
+		color=a;
 		point1=point;
 		point2=point3;
 	}

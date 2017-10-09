@@ -10,14 +10,14 @@ import javafx.scene.canvas.GraphicsContext;
 import java.awt.Color;
 
 public class Rectangle extends PaintObject implements Serializable{
-	private javafx.scene.paint.Color color;
+	private Color color;
 	private Point c;//left-upper point
 	private double width;//width of the rectangle
 	private double height;//height of the rectangle
 	public Rectangle(Color pink, Point point, Point point2) {
 		super(pink,point,point2);
-		ColorTypeConverter temp=new ColorTypeConverter();
-		color=temp.Awt2Fx(pink);
+		
+		color=pink;
 		if(point.getX()<point2.getX() && point.getY()<point2.getY()) {//if point is the left-upper point
 			c=point;
 			width=point2.getX()-point.getX();
@@ -48,7 +48,8 @@ public class Rectangle extends PaintObject implements Serializable{
 	@Override
 	public void draw(GraphicsContext gc) {
 		// TODO Auto-generated method stub
-		gc.setFill(color);
+		ColorTypeConverter temp=new ColorTypeConverter();
+		gc.setFill(temp.Awt2Fx(color));
 		gc.fillRect(c.getX(), c.getY(), width, height);
 	}
 }
